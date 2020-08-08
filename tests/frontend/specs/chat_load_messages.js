@@ -7,6 +7,7 @@ describe("chat-load-messages", function(){
   });
 
   it("adds a lot of messages", function(done) {
+    this.timeout(60000);
     var chrome$ = helper.padChrome$;
     helper.showChat()
     .done(function(){
@@ -36,17 +37,14 @@ describe("chat-load-messages", function(){
     var chatText;
     var expectedCount = 101;
     var chrome$ = helper.padChrome$;
-    helper.showChat()
-    .done(function(){
-      helper.waitFor(function(){
-        chatText = chrome$("#chattext");
-        //todo
-        return chatText.children("p").length == expectedCount;
-      }).always(function(){
-        expect(chatText.children("p").length).to.be(expectedCount);
-        done();
-      });
-    })
+    helper.waitFor(function(){
+      chatText = chrome$("#chattext");
+      //todo
+      return chatText.children("p").length == expectedCount;
+    }).always(function(){
+      expect(chatText.children("p").length).to.be(expectedCount);
+      done();
+    });
   });
 
   it("loads more messages", function(done) {
