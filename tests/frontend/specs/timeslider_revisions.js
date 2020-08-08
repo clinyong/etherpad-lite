@@ -2,7 +2,6 @@ describe("timeslider", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("loads adds a hundred revisions", function(done) { // passes
