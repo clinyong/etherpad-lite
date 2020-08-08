@@ -6,12 +6,10 @@ describe("As the caret is moved is the UI properly updated?", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   xit("creates a pad", function(done) {
     padName = helper.newPad(done);
-    this.timeout(60000);
   });
 */
 

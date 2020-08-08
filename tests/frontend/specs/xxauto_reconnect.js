@@ -21,7 +21,6 @@ describe('Automatic pad reload on Force Reconnect message', function() {
       }, 50000).done(done);
     });
 
-    this.timeout(60000);
   });
 
   it('displays a count down timer to automatically reconnect', function(done) {

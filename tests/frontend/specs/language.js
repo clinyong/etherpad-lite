@@ -9,7 +9,6 @@ describe("Language select and change", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   // Destroy language cookies

@@ -4,7 +4,6 @@ describe('drag and drop', function() {
     helper.newPad(function() {
       createScriptWithSeveralLines(done);
     });
-    this.timeout(60000);
   });
 
   context('when user drags part of one line and drops it far form its original place', function() {

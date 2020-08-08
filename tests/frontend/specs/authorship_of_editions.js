@@ -51,7 +51,6 @@ describe('author of pad edition', function() {
         });
       });
     });
-    this.timeout(60000);
   });
 
   // author 2 makes some changes on the pad

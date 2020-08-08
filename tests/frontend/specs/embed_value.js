@@ -52,7 +52,6 @@ describe("embed links", function(){
     //create a new pad before each test run
     beforeEach(function(cb){
       helper.newPad(cb);
-      this.timeout(60000);
     });
 
     describe("the share link", function(){
@@ -91,7 +90,6 @@ describe("embed links", function(){
   describe("when read only option is set", function(){
     beforeEach(function(cb){
       helper.newPad(cb);
-      this.timeout(60000);
     });
 
     describe("the share link", function(){

@@ -2,11 +2,9 @@ describe("change username value", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("Remembers the user name after a refresh", function(done) {
-    this.timeout(60000);
     var chrome$ = helper.padChrome$;
 
     //click on the settings button to make settings visible

@@ -2,7 +2,6 @@ describe("assign unordered list", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("insert unordered list text then removes by outdent", function(done){
@@ -38,7 +37,6 @@ describe("unassign unordered list", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("insert unordered list text then remove by clicking list again", function(done){
@@ -75,7 +73,6 @@ describe("keep unordered list on enter key", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("Keeps the unordered list on enter for the new line", function(done){
@@ -109,7 +106,6 @@ describe("Pressing Tab in an UL increases and decreases indentation", function()
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("indent and de-indent list item with keypress", function(done){
@@ -146,7 +142,6 @@ describe("Pressing indent/outdent button in an UL increases and decreases indent
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("indent and de-indent list item with indent button", function(done){

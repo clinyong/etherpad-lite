@@ -4,7 +4,6 @@ describe("timeslider", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb, padId);
-    this.timeout(60000);
   });
 
   it("Makes sure the export URIs are as expected when the padID is numeric", function(done) {
@@ -12,7 +11,6 @@ describe("timeslider", function(){
 
     // make some changes to produce 100 revisions
     var revs = 10;
-    this.timeout(60000);
     for(var i=0; i < revs; i++) {
       setTimeout(function() {
         // enter 'a' in the first text element

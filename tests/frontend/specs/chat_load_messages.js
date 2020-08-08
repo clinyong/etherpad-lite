@@ -3,11 +3,9 @@ describe("chat-load-messages", function(){
 
   it("creates a pad", function(done) {
     padName = helper.newPad(done);
-    this.timeout(60000);
   });
 
   it("adds a lot of messages", function(done) {
-    this.timeout(60000);
     var chrome$ = helper.padChrome$;
     helper.showChat()
     .done(function(){

@@ -2,7 +2,6 @@ describe("assign ordered list", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("inserts ordered list text", function(done){
@@ -133,7 +132,6 @@ describe("Pressing Tab in an OL increases and decreases indentation", function()
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("indent and de-indent list item with keypress", function(done){
@@ -172,7 +170,6 @@ describe("Pressing indent/outdent button in an OL increases and decreases indent
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("indent and de-indent list item with indent button", function(done){

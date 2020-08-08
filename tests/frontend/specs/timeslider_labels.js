@@ -2,7 +2,6 @@ describe("timeslider", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("Shows a date and time in the timeslider and make sure it doesn't include NaN", function(done) {
@@ -10,7 +9,6 @@ describe("timeslider", function(){
 
     // make some changes to produce 100 revisions
     var revs = 10;
-    this.timeout(60000);
     for(var i=0; i < revs; i++) {
       setTimeout(function() {
         // enter 'a' in the first text element

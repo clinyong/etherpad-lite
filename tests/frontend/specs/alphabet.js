@@ -4,7 +4,6 @@ describe("All the alphabet works n stuff", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("when you enter any char it appears right", function(done) {

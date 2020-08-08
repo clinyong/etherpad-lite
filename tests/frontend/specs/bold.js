@@ -2,7 +2,6 @@ describe("bold button", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("makes text bold on click", function(done) {

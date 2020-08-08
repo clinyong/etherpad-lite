@@ -2,7 +2,6 @@ describe("delete keystroke", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("makes text delete", function(done) {

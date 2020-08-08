@@ -2,7 +2,6 @@ describe("Chat messages and UI", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("opens chat, sends a message and makes sure it exists on the page", function(done) {
@@ -120,8 +119,6 @@ describe("Chat messages and UI", function(){
   });
 
   xit("Checks showChat=false URL Parameter hides chat then when removed it shows chat", function(done) {
-    this.timeout(60000);
-
     setTimeout(function(){ //give it a second to save the username on the server side
       helper.newPad({ // get a new pad, but don't clear the cookies
         clearCookies: false,

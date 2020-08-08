@@ -14,7 +14,6 @@ describe('Pad modal', function() {
         }, 50000).done(done);
       });
 
-      this.timeout(60000);
     });
 
     it('disables editor', function(done) {
@@ -63,7 +62,6 @@ describe('Pad modal', function() {
         .done(done)
       });
 
-      this.timeout(60000);
     });
     // This test breaks safari testing
 /*

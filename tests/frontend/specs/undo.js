@@ -1,7 +1,6 @@
 describe("undo button", function(){
   beforeEach(function(cb){
     helper.newPad(cb); // creates a new pad
-    this.timeout(60000);
   });
 
   it("undo some typing by clicking undo button", function(done){

@@ -5,7 +5,6 @@ describe("select formatting buttons when selection has style applied", function(
 
   before(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   var applyStyleOnLine = function(style, line) {

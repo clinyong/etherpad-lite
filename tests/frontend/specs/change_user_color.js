@@ -2,11 +2,9 @@ describe("change user color", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(60000);
   });
 
   it("Color picker matches original color and remembers the user color after a refresh", function(done) {
-    this.timeout(60000);
     var chrome$ = helper.padChrome$;
 
     //click on the settings button to make settings visible

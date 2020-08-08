@@ -20,8 +20,6 @@ describe("the test helper", function(){
     });
 
     it("gives me 3 jquery instances of chrome, outer and inner", function(done){
-      this.timeout(60000);
-
       //todo callback is not called
       helper.newPad(function(){
         //check if the jquery selectors have the desired elements
@@ -45,8 +43,6 @@ describe("the test helper", function(){
     // timeout may or may end up in the code. None the less, we test here
     // to catch it if the bug comes up again.
     it("clears cookies", function(done) {
-      this.timeout(60000);
-
       // set cookies far into the future to make sure they're not expired yet
       window.document.cookie = 'token=foo;expires=Thu, 01 Jan 3030 00:00:00 GMT; path=/';
       window.document.cookie = 'language=bar;expires=Thu, 01 Jan 3030 00:00:00 GMT; path=/';
@@ -114,8 +110,6 @@ describe("the test helper", function(){
     });
 
     it("sets pad prefs cookie", function(done) {
-      this.timeout(60000);
-
       helper.newPad({
         padPrefs: {foo:"bar"},
         cb: function(){
@@ -209,8 +203,6 @@ describe("the test helper", function(){
           return $fourthLine.text() === "to test";
         }).done(done);
       });
-
-      this.timeout(60000);
     });
 
     it("changes editor selection to be between startOffset of $startLine and endOffset of $endLine", function(done){
