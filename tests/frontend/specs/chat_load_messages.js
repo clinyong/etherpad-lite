@@ -52,41 +52,35 @@ describe("chat-load-messages", function(){
   it("loads more messages", function(done) {
     var expectedCount = 122;
     var chrome$ = helper.padChrome$;
-    helper.showChat()
-    .done(function(){
-      var chatText = chrome$("#chattext");
-      var loadMsgBtn = chrome$("#chatloadmessagesbutton");
+    var chatText = chrome$("#chattext");
+    var loadMsgBtn = chrome$("#chatloadmessagesbutton");
 
-      loadMsgBtn.click();
-      helper.waitFor(function(){
-        //todo
-        return chatText.children("p").length == expectedCount;
-      }).always(function(){
-        expect(chatText.children("p").length).to.be(expectedCount);
-        done();
-      });
-    })
+    loadMsgBtn.click();
+    helper.waitFor(function(){
+      //todo
+      return chatText.children("p").length == expectedCount;
+    }).always(function(){
+      expect(chatText.children("p").length).to.be(expectedCount);
+      done();
+    });
   });
 
   it("checks for button vanishing", function(done) {
     var expectedDisplay = 'none';
     var chrome$ = helper.padChrome$;
-    helper.showChat()
-    .done(function(){
-      var chatText = chrome$("#chattext");
-      var loadMsgBtn = chrome$("#chatloadmessagesbutton");
-      var loadMsgBall = chrome$("#chatloadmessagesball");
+    var chatText = chrome$("#chattext");
+    var loadMsgBtn = chrome$("#chatloadmessagesbutton");
+    var loadMsgBall = chrome$("#chatloadmessagesball");
 
-      loadMsgBtn.click();
-      helper.waitFor(function(){
-        return loadMsgBtn.css('display')  == expectedDisplay &&
-               loadMsgBall.css('display') == expectedDisplay;
-        //todo
-      }).always(function(){
-        expect(loadMsgBtn.css('display')).to.be(expectedDisplay);
-        expect(loadMsgBall.css('display')).to.be(expectedDisplay);
-        done();
-      });
-    })
+    loadMsgBtn.click();
+    helper.waitFor(function(){
+      return loadMsgBtn.css('display')  == expectedDisplay &&
+             loadMsgBall.css('display') == expectedDisplay;
+      //todo
+    }).always(function(){
+      expect(loadMsgBtn.css('display')).to.be(expectedDisplay);
+      expect(loadMsgBall.css('display')).to.be(expectedDisplay);
+      done();
+    });
   });
 });
