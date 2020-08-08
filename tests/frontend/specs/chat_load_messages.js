@@ -7,7 +7,6 @@ describe("chat-load-messages", function(){
   });
 
   it("adds a lot of messages", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
     helper.showChat()
     .done(function(){

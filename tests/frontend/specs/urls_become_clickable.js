@@ -7,7 +7,6 @@ describe("urls", function(){
 
   it("when you enter an url, it becomes clickable", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var firstTextElement = inner$("div").first();
@@ -24,7 +23,6 @@ describe("urls", function(){
 
   it("when you enter a url containing a !, it becomes clickable and contains the whole URL", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var firstTextElement = inner$("div").first();
@@ -40,13 +38,12 @@ describe("urls", function(){
         if(inner$("div").first().find("a")[0].href === url){
           return true;
         }
-      };
+      }
     }, 2000).done(done);
   });
 
   it("when you enter a url followed by a ], the ] is not included in the URL", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var firstTextElement = inner$("div").first();
@@ -63,7 +60,7 @@ describe("urls", function(){
         if(inner$("div").first().find("a")[0].href === url){
           return true;
         }
-      };
+      }
     }, 2000).done(done);
   });
 

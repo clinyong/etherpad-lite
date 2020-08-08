@@ -7,7 +7,6 @@ describe("enter keystroke", function(){
 
   it("creates a new line & puts cursor onto a new line", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var $firstTextElement = inner$("div").first();

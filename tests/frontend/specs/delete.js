@@ -7,7 +7,6 @@ describe("delete keystroke", function(){
 
   it("makes text delete", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var $firstTextElement = inner$("div").first();

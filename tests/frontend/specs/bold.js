@@ -36,7 +36,6 @@ describe("bold button", function(){
 
   it("makes text bold on keypress", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var $firstTextElement = inner$("div").first();

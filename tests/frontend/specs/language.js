@@ -14,7 +14,6 @@ describe("Language select and change", function(){
 
   // Destroy language cookies
   it("makes text german", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
     helper.showSettings()
@@ -45,7 +44,6 @@ describe("Language select and change", function(){
   });
 
   it("makes text English", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
     helper.showSettings()
@@ -78,7 +76,6 @@ describe("Language select and change", function(){
   });
 
   it("changes direction when picking an rtl lang", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
     helper.showSettings()
@@ -104,7 +101,6 @@ describe("Language select and change", function(){
   });
 
   it("changes direction when picking an ltr lang", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
     helper.showSettings()

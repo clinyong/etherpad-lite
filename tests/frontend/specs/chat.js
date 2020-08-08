@@ -6,7 +6,6 @@ describe("Chat messages and UI", function(){
   });
 
   it("opens chat, sends a message and makes sure it exists on the page", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
     var chatValue = "JohnMcLear";
 

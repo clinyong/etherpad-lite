@@ -9,7 +9,6 @@ describe("All the alphabet works n stuff", function(){
 
   it("when you enter any char it appears right", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var firstTextElement = inner$("div").first();
