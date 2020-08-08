@@ -67,7 +67,6 @@ describe("timeslider", function(){
   // Disabled as jquery trigger no longer works properly
   xit("changes the url when clicking on the timeslider", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     // make some changes to produce 7 revisions
     var timePerRev = 1000
@@ -143,6 +142,7 @@ describe("timeslider", function(){
             return timeslider$('#innerdocbody').text().length == oldLength;
           }
         }, 10000).always(function(){
+          //todo expected 413 to sort of equal 412 
           expect( timeslider$('#innerdocbody').text().length ).to.eql( oldLength );
           done();
         });
@@ -152,7 +152,6 @@ describe("timeslider", function(){
 
   it("checks the export url", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
     this.timeout(11000);
     inner$("div").first().sendkeys('a');
 

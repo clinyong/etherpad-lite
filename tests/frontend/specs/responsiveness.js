@@ -30,7 +30,6 @@ describe('Responsiveness of Editor', function() {
       this.skip();
     }
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
     var chars = '0000000000'; // row of placeholder chars
     var amount = 200000; //number of blocks of chars we will insert
     var length = (amount * (chars.length) +1); // include a counter for each space

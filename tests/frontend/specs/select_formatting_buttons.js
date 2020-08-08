@@ -84,7 +84,6 @@ describe("select formatting buttons when selection has style applied", function(
 
   var pressFormattingShortcutOnSelection = function(key) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     //get the first text element out of the inner iframe
     var $firstTextElement = inner$("div").first();

@@ -41,6 +41,7 @@ describe("assign ordered list", function(){
         helper.waitFor(function() {
           return helper.padInner$('div').first().find('ol li').length === 1;
         }).done(function() {
+          //todo done not called
           expect().fail(function() { return 'Unordered list inserted, should ignore shortcut' });
         }).fail(function() {
           done();
@@ -72,6 +73,8 @@ describe("assign ordered list", function(){
       it('does not insert unordered list', function(done) {
         helper.waitFor(function() {
           return helper.padInner$('div').first().find('ol li').length === 1;
+          //todo
+          //done not called
         }).done(function() {
           expect().fail(function() { return 'Unordered list inserted, should ignore shortcut' });
         }).fail(function() {

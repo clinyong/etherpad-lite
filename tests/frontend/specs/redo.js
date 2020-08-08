@@ -35,7 +35,6 @@ describe("undo button then redo button", function(){
 
   it("redo some typing with keypress", function(done){
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     // get the first text element inside the editable space
     var $firstTextElement = inner$("div span").first();

@@ -7,7 +7,6 @@ describe("timeslider", function(){
 
   it("Shows a date and time in the timeslider and make sure it doesn't include NaN", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     // make some changes to produce 100 revisions
     var revs = 10;

@@ -26,6 +26,7 @@ xdescribe("timeslider button takes you to the timeslider of a pad", function(){
       $timesliderButton.click(); // So click the timeslider link
 
       helper.waitFor(function(){
+        //todo became never true
         var iFrameURL = chrome$.window.location.href;
         if(iFrameURL){
           return iFrameURL.indexOf("timeslider") !== -1;

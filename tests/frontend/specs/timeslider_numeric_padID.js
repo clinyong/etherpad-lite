@@ -9,7 +9,6 @@ describe("timeslider", function(){
 
   it("Makes sure the export URIs are as expected when the padID is numeric", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     // make some changes to produce 100 revisions
     var revs = 10;
@@ -58,6 +57,7 @@ describe("timeslider", function(){
           var exportLink = timeslider$('#exporthtmla').attr('href');
           var checkVal = padId + "/0/export/html";
           var includesCorrectURI = exportLink.indexOf(checkVal);
+          //todo
           expect(includesCorrectURI).to.not.be(-1);
           done();
         }, 400);
