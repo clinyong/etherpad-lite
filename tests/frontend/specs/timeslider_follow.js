@@ -2,12 +2,11 @@ describe("timeslider", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
-    this.timeout(6000);
+    this.timeout(60000);
   });
 
   it("follow content as it's added to timeslider", function(done) { // passes
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     // make some changes to produce 100 revisions
     var timePerRev = 900
@@ -24,6 +23,7 @@ describe("timeslider", function(){
       }, timePerRev*i);
     }
 
+    //todo
     setTimeout(function() {
       // go to timeslider
       $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider#0');
