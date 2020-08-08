@@ -20,8 +20,9 @@ describe("the test helper", function(){
     });
 
     it("gives me 3 jquery instances of chrome, outer and inner", function(done){
-      this.timeout(10000);
+      this.timeout(60000);
 
+      //todo callback is not called
       helper.newPad(function(){
         //check if the jquery selectors have the desired elements
         expect(helper.padChrome$("#editbar").length).to.be(1);
