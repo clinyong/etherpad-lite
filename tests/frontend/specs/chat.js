@@ -10,12 +10,10 @@ describe("Chat messages and UI", function(){
     var chrome$ = helper.padChrome$;
     var chatValue = "JohnMcLear";
 
-    //click on the chat button to make chat visible
-    var $chatButton = chrome$("#chaticon");
-    $chatButton.click();
-    var $chatInput = chrome$("#chatinput");
-    $chatInput.sendkeys('JohnMcLear'); // simulate a keypress of typing JohnMcLear
-    $chatInput.sendkeys('{enter}'); // simulate a keypress of enter actually does evt.which = 10 not 13
+    helper.showChat();
+
+    helper.sendChatMessage(chatValue); // simulate a keypress of typing JohnMcLear
+    helper.sendChatMessage('{enter}'); // simulate a keypress of enter actually does evt.which = 10 not 13
 
     //check if chat shows up
     helper.waitFor(function(){
@@ -39,16 +37,13 @@ describe("Chat messages and UI", function(){
   });
 
   it("makes sure that an empty message can't be sent", function(done) {
-    var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
-    //click on the chat button to make chat visible
-    var $chatButton = chrome$("#chaticon");
-    $chatButton.click();
-    var $chatInput = chrome$("#chatinput");
-    $chatInput.sendkeys('{enter}'); // simulate a keypress of enter (to send an empty message)
-    $chatInput.sendkeys('mluto'); // simulate a keypress of typing mluto
-    $chatInput.sendkeys('{enter}'); // simulate a keypress of enter (to send 'mluto')
+    helper.showChat();
+
+    helper.sendChatMessage('{enter}'); // simulate a keypress of enter (to send an empty message)
+    helper.sendChatMessage('mluto'); // simulate a keypress of typing mluto
+    helper.sendChatMessage('{enter}'); // simulate a keypress of enter (to send 'mluto')
 
     //check if chat shows up
     helper.waitFor(function(){
@@ -64,78 +59,69 @@ describe("Chat messages and UI", function(){
     });
   });
 
-  it("makes chat stick to right side of the screen", function(done) {
-    var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
+  it("makes chat stick to right side of the screen via settings, then close it", function(done) {
+    helper.showSettings()
+    .done(function(){
+      helper.enableStickyChatviaSettings()
+      .done(function(){
+        expect(helper.isChatboxShown()).to.be(true);
+        expect(helper.isChatboxSticky()).to.be(true);
+        helper.disableStickyChatviaSettings()
+        .done(function(){
+          expect(helper.isChatboxSticky()).to.be(false);
+          expect(helper.isChatboxShown()).to.be(true);
+          helper.hideChat()
+          .done(function(){
+            expect(helper.isChatboxSticky()).to.be(false);
+            expect(helper.isChatboxShown()).to.be(false);
+            done();
+          })
+        })
+      })
+    })
+  })
 
-    //click on the settings button to make settings visible
-    var $settingsButton = chrome$(".buttonicon-settings");
-    $settingsButton.click();
-
-    //get the chat selector
-    var $stickychatCheckbox = chrome$("#options-stickychat");
-
-    //select chat always on screen
-    if (!$stickychatCheckbox.is(':checked')) {
-      $stickychatCheckbox.click();
-    }
-
-    // due to animation, we need to make some timeout...
-    setTimeout(function() {
-      //check if chat changed to get the stickychat Class
-      var $chatbox = chrome$("#chatbox");
-      var hasStickyChatClass = $chatbox.hasClass("stickyChat");
-      expect(hasStickyChatClass).to.be(true);
-
-      // select chat always on screen and fire change event
-      $stickychatCheckbox.click();
-
-      setTimeout(function() {
-        //check if chat changed to remove the stickychat Class
-        var hasStickyChatClass = $chatbox.hasClass("stickyChat");
-        expect(hasStickyChatClass).to.be(false);
-
-        done();
-      }, 10)
-    }, 10)
-
-
+  it("makes chat stick to right side of the screen via icon on the top right, then remove sticky again", function(done) {
+    helper.showChat()
+    .done(function(){
+      helper.enableStickyChatviaIcon()
+      .done(function(){
+        expect(helper.isChatboxShown()).to.be(true);
+        expect(helper.isChatboxSticky()).to.be(true);
+        helper.disableStickyChatviaIcon()
+        .done(function(){
+          expect(helper.isChatboxShown()).to.be(true);
+          expect(helper.isChatboxSticky()).to.be(false);
+          done();
+        })
+      })
+    })
   });
 
-  it("makes chat stick to right side of the screen then makes it one step smaller", function(done) {
-    var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
-
-    // open chat
-    chrome$('#chaticon').click();
-
-    // select chat always on screen from chatbox
-    chrome$('.stick-to-screen-btn').click();
-
-    // due to animation, we need to make some timeout...
-    setTimeout(function() {
-      //check if chat changed to get the stickychat Class
-      var $chatbox = chrome$("#chatbox");
-      var hasStickyChatClass = $chatbox.hasClass("stickyChat");
-      expect(hasStickyChatClass).to.be(true);
-
-      // select chat always on screen and fire change event
-      chrome$('#titlecross').click();
-
-      setTimeout(function() {
-        //check if chat changed to remove the stickychat Class
-        var hasStickyChatClass = $chatbox.hasClass("stickyChat");
-        expect(hasStickyChatClass).to.be(false);
-
-        done();
-      }, 10)
-    }, 10)
+  it("titlecross icon can remove sticky and close chatbox ", function(done) {
+    helper.showChat()
+    .done(function(){
+      helper.enableStickyChatviaIcon()
+      .done(function(){
+        expect(helper.isChatboxShown()).to.be(true);
+        expect(helper.isChatboxSticky()).to.be(true);
+        helper.disableStickyChatviaIcon()
+        .done(function(){
+          expect(helper.isChatboxShown()).to.be(true);
+          expect(helper.isChatboxSticky()).to.be(false);
+          helper.hideChat()
+          .done(function(){
+            expect(helper.isChatboxShown()).to.be(false);
+            expect(helper.isChatboxSticky()).to.be(false);
+          done();
+          })
+        })
+      })
+    })
   });
 
   xit("Checks showChat=false URL Parameter hides chat then when removed it shows chat", function(done) {
     this.timeout(60000);
-    var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
 
     setTimeout(function(){ //give it a second to save the username on the server side
       helper.newPad({ // get a new pad, but don't clear the cookies
@@ -143,19 +129,13 @@ describe("Chat messages and UI", function(){
         params:{
           showChat: "false"
         }, cb: function(){
-          var chrome$ = helper.padChrome$;
-          var chaticon = chrome$("#chaticon");
-          // chat should be hidden.
-          expect(chaticon.is(":visible")).to.be(false);
+          expect(helper.chaticon.is(":visible")).to.be(false);
 
           setTimeout(function(){ //give it a second to save the username on the server side
             helper.newPad({ // get a new pad, but don't clear the cookies
               clearCookies: false
               , cb: function(){
-                var chrome$ = helper.padChrome$;
-                var chaticon = chrome$("#chaticon");
-                // chat should be visible.
-                expect(chaticon.is(":visible")).to.be(true);
+                expect(helper.chaticon.is(":visible")).to.be(true);
                 done();
               }
             });

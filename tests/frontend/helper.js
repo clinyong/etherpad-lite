@@ -271,4 +271,172 @@ var helper = {};
 
     _it(name, func);
   }
+
+
+  /**
+   *
+   * Page components
+   * Be careful to make them functions, so that they are not executed
+   * on tests that don't need all of them
+   *
+   */
+
+  /**
+   * Sends a chat `message` via `sendKeys`
+   *
+   * @param {string} message the chat message to be sent
+   */
+  helper.sendChatMessage = function(message){
+    helper.padChrome$("#chatinput").sendkeys(message)
+  }
+
+  /**
+   * Gets the chat icon from the bottom right of the page
+   *
+   * @returns {HTMLElement} the chat icon
+   */
+  helper.chatIcon = function(){return helper.padChrome$('#chaticon')}
+
+  /**
+   * Gets the titlecross icon
+   *
+   * @returns {HTMLElement} the titlecross icon
+   */
+  helper.titlecross = function(){return helper.padChrome$('#titlecross')}
+
+  /**
+   * Gets the settings button
+   *
+   * @returns {HTMLElement} the settings button
+   */
+  helper.settingsButton = function(){return helper.padChrome$("button[data-l10n-id='pad.toolbar.settings.title']") }
+
+  /**
+   * Gets the settings menu
+   *
+   * @returns {HTMLElement} the settings menu
+   */
+
+  helper.settingsMenu = function(){return helper.padChrome$("#settings") }
+
+  /**
+   * Opens the chat window unless it is already open via an
+   * icon on the bottom right of the page
+   */
+  helper.showChat = function(){
+    var chaticon = helper.chatIcon();
+    if(chaticon.hasClass('visible')) {
+      chaticon.click()
+      return helper.waitFor(function(){return !chaticon.hasClass('visible'); },2000)
+
+    }
+  }
+
+  /**
+   * Closes the chat window if it is shown and not sticky
+   */
+  helper.hideChat = function(){
+    if(helper.isChatboxShown() && !helper.isChatboxSticky()) {
+      helper.titlecross().click()
+      return helper.waitFor(function(){return !helper.isChatboxShown(); },2000);
+    }
+  }
+
+  /**
+   * Disables the stickyness of the chat window via an icon on the
+   * upper right
+   */
+  helper.disableStickyChatviaIcon = function() {
+    if(helper.isChatboxShown() && helper.isChatboxSticky()) {
+      helper.titlecross().click()
+      return helper.waitFor(function(){return !helper.isChatboxSticky()},2000);
+    }
+  }
+
+  /**
+   * Opens the settings menu if its hidden via button
+   */
+  helper.showSettings = function() {
+    if(!helper.isSettingsShown()){
+      helper.settingsButton().click()
+      return helper.waitFor(function(){return helper.isSettingsShown(); },2000);
+    }
+  }
+
+  /**
+   * Hide the settings menu if its open via button
+   */
+  helper.hideSettings = function() {
+    if(helper.isSettingsShown()){
+      helper.settingsButton().click()
+      helper.waitFor(function(){return !helper.isSettingsShown(); },2000);
+    }
+  }
+
+  /**
+   * Is the settings menu open?
+   *
+   * @returns {boolean} is the settings menu shown?
+   */
+  helper.isSettingsShown = function() {
+    return helper.padChrome$('#settings').hasClass('popup-show');
+  }
+
+
+  /**
+   * Makes the chat window sticky via settings menu if the settings menu is
+   * open and sticky button is not checked
+   */
+  helper.enableStickyChatviaSettings = function() {
+    var stickyChat = helper.padChrome$('#options-stickychat');
+    if(helper.isSettingsShown() && !stickyChat.is(':checked')) {
+      stickyChat.click();
+      return helper.waitFor(function(){
+        return helper.isChatboxSticky();
+      },2000);
+    }
+  }
+
+  /**
+   * Unsticks the chat window via settings menu if the settings menu is open
+   * and sticky button is checked
+   */
+  helper.disableStickyChatviaSettings = function() {
+    var stickyChat = helper.padChrome$('#options-stickychat');
+    if(helper.isSettingsShown() && stickyChat.is(':checked')) {
+      stickyChat.click();
+      return helper.waitFor(function(){return !helper.isChatboxSticky()},2000);
+    }
+  }
+
+  /**
+   * Makes the chat window sticky via an icon on the top right of the chat
+   * window
+   */
+  helper.enableStickyChatviaIcon = function() {
+    var stickyChat = helper.padChrome$('#titlesticky');
+    if(helper.isChatboxShown() && !helper.isChatboxSticky()) {
+      stickyChat.click();
+      return helper.waitFor(function(){return helper.isChatboxSticky()},2000);
+    }
+  }
+
+  /**
+   * Returns true if the chat box is shown
+   *
+   * @returns {boolean} visibility of the chat box
+   */
+  helper.isChatboxShown = function() {
+    return helper.padChrome$('#chatbox').hasClass('visible');
+  }
+
+  /**
+   * Returns true if the chat box is sticky
+   *
+   * @returns {boolean} stickyness of the chat box
+   */
+  helper.isChatboxSticky = function() {
+    return helper.padChrome$('#chatbox').hasClass('stickyChat');
+  }
+
 })()
