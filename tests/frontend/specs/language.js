@@ -17,119 +17,116 @@ describe("Language select and change", function(){
     var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
-    //click on the settings button to make settings visible
-    var $settingsButton = chrome$(".buttonicon-settings");
-    $settingsButton.click();
-
-    //click the language button
-    var $language = chrome$("#languagemenu");
-    var $languageoption = $language.find("[value=de]");
-
-    //select german
-    $languageoption.attr('selected','selected');
-    $language.change();
-
-    helper.waitFor(function() {
-      return chrome$(".buttonicon-bold").parent()[0]["title"] == "Fett (Strg-B)";
-     })
+    helper.showSettings()
     .done(function(){
-      //get the value of the bold button
-      var $boldButton = chrome$(".buttonicon-bold").parent();
+      //click the language button
+      var $language = chrome$("#languagemenu");
+      var $languageoption = $language.find("[value=de]");
 
-      //get the title of the bold button
-      var boldButtonTitle = $boldButton[0]["title"];
+      //select german
+      $languageoption.attr('selected','selected');
+      $language.change();
 
-      //check if the language is now german
-      expect(boldButtonTitle).to.be("Fett (Strg-B)");
-      done();
-    });
+      helper.waitFor(function() {
+        return chrome$(".buttonicon-bold").parent()[0]["title"] == "Fett (Strg-B)";
+       })
+      .done(function(){
+        //get the value of the bold button
+        var $boldButton = chrome$(".buttonicon-bold").parent();
+
+        //get the title of the bold button
+        var boldButtonTitle = $boldButton[0]["title"];
+
+        //check if the language is now german
+        expect(boldButtonTitle).to.be("Fett (Strg-B)");
+        done();
+      });
+    })
   });
 
   it("makes text English", function(done) {
     var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
-    //click on the settings button to make settings visible
-    var $settingsButton = chrome$(".buttonicon-settings");
-    $settingsButton.click();
-
-    //click the language button
-    var $language = chrome$("#languagemenu");
-    //select english
-    $language.val("en");
-    $language.change();
-
-    //get the value of the bold button
-    var $boldButton = chrome$(".buttonicon-bold").parent();
-
-    helper.waitFor(function() { return $boldButton[0]["title"] != "Fett (Strg+B)";})
+    helper.showSettings()
     .done(function(){
+
+      //click the language button
+      var $language = chrome$("#languagemenu");
+      //select english
+      $language.val("en");
+      $language.change();
 
       //get the value of the bold button
       var $boldButton = chrome$(".buttonicon-bold").parent();
 
-      //get the title of the bold button
-      var boldButtonTitle = $boldButton[0]["title"];
+      helper.waitFor(function() { return $boldButton[0]["title"] != "Fett (Strg+B)";})
+      .done(function(){
 
-      //check if the language is now English
-      expect(boldButtonTitle).to.be("Bold (Ctrl+B)");
-      done();
+        //get the value of the bold button
+        var $boldButton = chrome$(".buttonicon-bold").parent();
 
-    });
+        //get the title of the bold button
+        var boldButtonTitle = $boldButton[0]["title"];
+
+        //check if the language is now English
+        expect(boldButtonTitle).to.be("Bold (Ctrl+B)");
+        done();
+
+      });
+    })
   });
 
   it("changes direction when picking an rtl lang", function(done) {
     var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
-    //click on the settings button to make settings visible
-    var $settingsButton = chrome$(".buttonicon-settings");
-    $settingsButton.click();
-
-    //click the language button
-    var $language = chrome$("#languagemenu");
-    var $languageoption = $language.find("[value=ar]");
-
-    //select arabic
-    // $languageoption.attr('selected','selected'); // Breaks the test..
-    $language.val("ar");
-    $languageoption.change();
-
-    helper.waitFor(function() {
-      return chrome$("html")[0]["dir"] != 'ltr';
-     })
+    helper.showSettings()
     .done(function(){
-      // check if the document's direction was changed
-      expect(chrome$("html")[0]["dir"]).to.be("rtl");
-      done();
-    });
+      //click the language button
+      var $language = chrome$("#languagemenu");
+      var $languageoption = $language.find("[value=ar]");
+
+      //select arabic
+      // $languageoption.attr('selected','selected'); // Breaks the test..
+      $language.val("ar");
+      $languageoption.change();
+
+      helper.waitFor(function() {
+        return chrome$("html")[0]["dir"] != 'ltr';
+       })
+      .done(function(){
+        // check if the document's direction was changed
+        expect(chrome$("html")[0]["dir"]).to.be("rtl");
+        done();
+      });
+    })
   });
 
   it("changes direction when picking an ltr lang", function(done) {
     var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
-    //click on the settings button to make settings visible
-    var $settingsButton = chrome$(".buttonicon-settings");
-    $settingsButton.click();
-
-    //click the language button
-    var $language = chrome$("#languagemenu");
-    var $languageoption = $language.find("[value=en]");
-
-    //select english
-    //select arabic
-    $languageoption.attr('selected','selected');
-    $language.val("en");
-    $languageoption.change();
-
-    helper.waitFor(function() {
-      return chrome$("html")[0]["dir"] != 'rtl';
-     })
+    helper.showSettings()
     .done(function(){
-      // check if the document's direction was changed
-      expect(chrome$("html")[0]["dir"]).to.be("ltr");
-      done();
-    });
+      //click the language button
+      var $language = chrome$("#languagemenu");
+      var $languageoption = $language.find("[value=en]");
+
+      //select english
+      //select arabic
+      $languageoption.attr('selected','selected');
+      $language.val("en");
+      $languageoption.change();
+
+      helper.waitFor(function() {
+        return chrome$("html")[0]["dir"] != 'rtl';
+       })
+      .done(function(){
+        // check if the document's direction was changed
+        expect(chrome$("html")[0]["dir"]).to.be("ltr");
+        done();
+      });
+    })
   });
 });

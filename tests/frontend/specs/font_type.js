@@ -9,25 +9,24 @@ describe("font select", function(){
     var inner$ = helper.padInner$;
     var chrome$ = helper.padChrome$;
 
-    //click on the settings button to make settings visible
-    var $settingsButton = chrome$(".buttonicon-settings");
-    $settingsButton.click();
+    helper.showSettings()
+    .done(function(){
+      //get the font menu and RobotoMono option
+      var $viewfontmenu = chrome$("#viewfontmenu");
+      var $RobotoMonooption = $viewfontmenu.find("[value=RobotoMono]");
 
-    //get the font menu and RobotoMono option
-    var $viewfontmenu = chrome$("#viewfontmenu");
-    var $RobotoMonooption = $viewfontmenu.find("[value=RobotoMono]");
+      //select RobotoMono and fire change event
+      // $RobotoMonooption.attr('selected','selected');
+      // commenting out above will break safari test
+      $viewfontmenu.val("RobotoMono");
+      $viewfontmenu.change();
 
-    //select RobotoMono and fire change event
-    // $RobotoMonooption.attr('selected','selected');
-    // commenting out above will break safari test
-    $viewfontmenu.val("RobotoMono");
-    $viewfontmenu.change();
+      //check if font changed to RobotoMono
+      var fontFamily = inner$("body").css("font-family").toLowerCase();
+      var containsStr = fontFamily.indexOf("robotomono");
+      expect(containsStr).to.not.be(-1);
 
-    //check if font changed to RobotoMono
-    var fontFamily = inner$("body").css("font-family").toLowerCase();
-    var containsStr = fontFamily.indexOf("robotomono");
-    expect(containsStr).to.not.be(-1);
-
-    done();
+      done();
+    })
   });
 });

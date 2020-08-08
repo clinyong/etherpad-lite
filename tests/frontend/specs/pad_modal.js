@@ -56,11 +56,11 @@ describe('Pad modal', function() {
 
   // we use "settings" here, but other modals have the same behaviour
   context('when modal is not an error message', function() {
-    var MODAL_SELECTOR = '#settings';
 
     beforeEach(function(done) {
       helper.newPad(function() {
-        openSettingsAndWaitForModalToBeVisible(done);
+        helper.showSettings()
+        .done(done)
       });
 
       this.timeout(60000);
@@ -78,7 +78,7 @@ describe('Pad modal', function() {
       });
 
       it('closes the modal', function(done) {
-        expect(isModalOpened(MODAL_SELECTOR)).to.be(false);
+        expect(helper.isSettingsShown()).to.be(false);
         done();
       });
     });
@@ -89,7 +89,7 @@ describe('Pad modal', function() {
       });
 
       it('closes the modal', function(done) {
-        expect(isModalOpened(MODAL_SELECTOR)).to.be(false);
+        expect(helper.isSettingsShown()).to.be(false);
         done();
       });
     });
@@ -105,16 +105,6 @@ describe('Pad modal', function() {
     $lineNumbersColumn.click();
   }
 
-  var openSettingsAndWaitForModalToBeVisible = function(done) {
-    helper.padChrome$('.buttonicon-settings').click();
-
-    // wait for modal to be displayed
-    var modalSelector = '#settings';
-    helper.waitFor(function() {
-      return isModalOpened(modalSelector);
-    }, 10000).done(done);
-  }
-
   var isEditorDisabled = function() {
     var editorDocument = helper.padOuter$("iframe[name='ace_inner']").get(0).contentDocument;
     var editorBody     = editorDocument.getElementById('innerdocbody');
@@ -125,9 +115,4 @@ describe('Pad modal', function() {
     return editorIsDisabled;
   }
 
-  var isModalOpened = function(modalSelector) {
-    var $modal = helper.padChrome$(modalSelector);
-
-    return $modal.hasClass('popup-show');
-  }
 });
