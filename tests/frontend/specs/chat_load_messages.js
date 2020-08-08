@@ -13,8 +13,6 @@ describe("chat-load-messages", function(){
       var chatInput = chrome$("#chatinput");
       var chatText = chrome$("#chattext");
 
-      this.timeout(60000);
-
       var messages = 140;
       for(var i=1; i <= messages; i++) {
         var num = ''+i;
