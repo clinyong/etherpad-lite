@@ -281,14 +281,10 @@ var helper = {};
    *
    */
 
+
   /**
-   * Sends a chat `message` via `sendKeys`
-   *
-   * @param {string} message the chat message to be sent
+   * Buttons, icons and ids
    */
-  helper.sendChatMessage = function(message){
-    helper.padChrome$("#chatinput").sendkeys(message)
-  }
 
   /**
    * Gets the chat icon from the bottom right of the page
@@ -312,12 +308,48 @@ var helper = {};
   helper.settingsButton = function(){return helper.padChrome$("button[data-l10n-id='pad.toolbar.settings.title']") }
 
   /**
+   * Gets the timeslider button
+   *
+   * @returns {HTMLElement} the timeslider button
+   */
+  helper.timesliderButton = function(){return helper.padChrome$("button[data-l10n-id='pad.toolbar.timeslider.title']") }
+
+  /**
    * Gets the settings menu
    *
    * @returns {HTMLElement} the settings menu
    */
+  helper.settingsMenu = function(){return helper.padChrome$('#settings') };
 
-  helper.settingsMenu = function(){return helper.padChrome$("#settings") }
+  /**
+   * Gets the timer div on a timeslider
+   *
+   * @returns {HTMLElement} timer
+   */
+  helper.timesliderTimer = function(){return helper.contentWindow().$
+    && helper.contentWindow().$('#timer')
+  };
+
+  /**
+   * Gets the time of the revision on a timeslider
+   *
+   * @returns {HTMLElement} timer
+   */
+  helper.timesliderTimerTime = function(){return helper.contentWindow().$
+      && helper.contentWindow().$('#timer').text() };
+
+  /**
+   * the contentWindow is either the normal pad or timeslider
+   *
+   * @returns {HTMLElement} contentWindow
+   */
+  helper.contentWindow = function(){
+    return $('#iframe-container iframe')[0].contentWindow;
+  }
+
+  /**
+   * Methods
+   */
 
   /**
    * Opens the chat window unless it is already open via an
@@ -328,7 +360,6 @@ var helper = {};
     if(chaticon.hasClass('visible')) {
       chaticon.click()
       return helper.waitFor(function(){return !chaticon.hasClass('visible'); },2000)
-
     }
   }
 
@@ -365,6 +396,7 @@ var helper = {};
 
   /**
    * Hide the settings menu if its open via button
+   * @todo untested
    */
   helper.hideSettings = function() {
     if(helper.isSettingsShown()){
@@ -372,16 +404,6 @@ var helper = {};
       helper.waitFor(function(){return !helper.isSettingsShown(); },2000);
     }
   }
-
-  /**
-   * Is the settings menu open?
-   *
-   * @returns {boolean} is the settings menu shown?
-   */
-  helper.isSettingsShown = function() {
-    return helper.padChrome$('#settings').hasClass('popup-show');
-  }
-
 
   /**
    * Makes the chat window sticky via settings menu if the settings menu is
@@ -419,6 +441,55 @@ var helper = {};
       stickyChat.click();
       return helper.waitFor(function(){return helper.isChatboxSticky()},2000);
     }
+  }
+
+  /**
+   * Sets the src-attribute of the main iframe to the timeslider
+   * In case a revision is given, sets the timeslider to this specific revision
+   * It waits until the timer is filled with date and time
+   *
+   * @param {number} [revision] the optional revision
+   */
+  helper.gotoTimeslider = function(revision){
+    helper.padChrome$('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider' +
+    revision ? '#'+revision : '');
+    return helper.waitFor(function(){return helper.timesliderTimerTime()
+      && helper.timesliderTimerTime().match(/[a-z/: ]+/) },5000);
+  }
+
+  /**
+   * Enters timeslider via timeslider button
+   * It waits until the timer is filled with date and time
+   */
+  helper.gotoTimesliderviaButton = function(){
+    if (!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/)){
+      helper.timesliderButton().click();
+      return helper.waitFor(function(){return helper.timesliderTimerTime()
+        && helper.timesliderTimerTime().match(/[a-z/: ]+/) },5000);
+    }
+  }
+
+  /**
+   * Sends a chat `message` via `sendKeys`
+   *
+   * @param {string} message the chat message to be sent
+   */
+  helper.sendChatMessage = function(message){
+    helper.padChrome$("#chatinput").sendkeys(message)
+  }
+
+
+  /**
+   * UI
+   */
+
+  /**
+   * Returns true if the settings menu is visible
+   *
+   * @returns {boolean} is the settings menu shown?
+   */
+  helper.isSettingsShown = function() {
+    return helper.padChrome$('#settings').hasClass('popup-show');
   }
 
   /**
