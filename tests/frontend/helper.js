@@ -261,16 +261,16 @@ var helper = {};
   window.console.log = window.console.log || function(){}
 
   //force usage of callbacks in it
-  var _it = it;
-  it = function(name, func){
-    if(func && func.length !== 1){
-      func = function(){
-        throw new Error("Please use always a callback with it() - " + func.toString());
-      }
-    }
+  //var _it = it;
+  //it = function(name, func){
+  //  if(func && func.length !== 1){
+  //    func = function(){
+  //      throw new Error("Please use always a callback with it() - " + func.toString());
+  //    }
+  //  }
 
-    _it(name, func);
-  }
+  //  _it(name, func);
+  //}
 
 
   /**
@@ -345,6 +345,31 @@ var helper = {};
    */
   helper.contentWindow = function(){
     return $('#iframe-container iframe')[0].contentWindow;
+  }
+
+  /**
+   * The pad text as an array of lines
+   *
+   * @returns {Array.<string>} lines of text
+   */
+  helper.fulltext = function(){
+    return helper.padInner$('.ace-line').map(function(){
+      return $(this).text()
+    }).get()
+  }
+
+  /**
+   * The pad text as an array of divs
+   *
+   * @example
+   * helper.linesElem()[2].sendkeys('abc') // sends abc to the third line
+   *
+   * @returns {Array.<HTMLElement>} array of divs
+   */
+  helper.linesElem = function(){
+    return helper.padInner$('.ace-line').map(function(){
+      return $(this)
+    })
   }
 
   /**
@@ -447,14 +472,16 @@ var helper = {};
    * Sets the src-attribute of the main iframe to the timeslider
    * In case a revision is given, sets the timeslider to this specific revision
    * It waits until the timer is filled with date and time
+   * @todo for some reason this does only work the first time, you cannot
+   * goto rev 0 and then via the same method to rev 5. Use buttons instead
    *
    * @param {number} [revision] the optional revision
    */
   helper.gotoTimeslider = function(revision){
-    helper.padChrome$('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider' +
-    revision ? '#'+revision : '');
+    $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider' +
+    (revision ? '#'+revision : ''));
     return helper.waitFor(function(){return helper.timesliderTimerTime()
-      && helper.timesliderTimerTime().match(/[a-z/: ]+/) },5000);
+      && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },5000);
   }
 
   /**
@@ -465,7 +492,7 @@ var helper = {};
     if (!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/)){
       helper.timesliderButton().click();
       return helper.waitFor(function(){return helper.timesliderTimerTime()
-        && helper.timesliderTimerTime().match(/[a-z/: ]+/) },5000);
+        && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },10000);
     }
   }
 
