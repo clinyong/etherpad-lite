@@ -354,20 +354,25 @@ var helper = {};
   helper.settingsMenu = function(){return helper.padChrome$('#settings') };
 
   /**
-   * Gets the timer div on a timeslider
+   * Gets the timer div of a timeslider that has the datetime of the revision
    *
    * @returns {HTMLElement} timer
    */
-  helper.timesliderTimer = function(){return helper.contentWindow().$
-    && helper.contentWindow().$('#timer')
-  };
+  helper.timesliderTimer = function(){
+    if(typeof helper.contentWindow().$ == 'function'){
+      return helper.contentWindow().$('#timer') }
+    }
 
   /**
    * Gets the time of the revision on a timeslider
    *
    * @returns {HTMLElement} timer
    */
-  helper.timesliderTimerTime = function(){return helper.timesliderTimer().text()}
+  helper.timesliderTimerTime = function(){
+    if(helper.timesliderTimer()){
+      return helper.timesliderTimer().text()
+    }
+  }
 
   /**
    * the contentWindow is either the normal pad or timeslider
@@ -534,7 +539,7 @@ var helper = {};
     var iframe = $('#iframe-container iframe');
     iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
     return helper.waitForPromise(function(){return helper.timesliderTimerTime()
-      && !Number.isNaN(helper.timesliderTimerTime().getTime()) },5000);
+      && !Number.isNaN(new Date(helper.timesliderTimerTime()).getTime()) },5000);
   }
 
   /**
@@ -545,7 +550,7 @@ var helper = {};
     if (!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/)){
       helper.timesliderButton().click();
       return helper.waitForPromise(function(){return helper.timesliderTimerTime()
-        && !Number.isNaN(helper.timesliderTimerTime().getTime()) },10000);
+        && !Number.isNaN(new Date(helper.timesliderTimerTime()).getTime()) },10000);
     }
   }
 
