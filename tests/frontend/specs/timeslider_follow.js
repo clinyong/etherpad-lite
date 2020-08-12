@@ -14,6 +14,8 @@ describe("timeslider", function(){
     }
 
     await helper.gotoTimeslider(0);
+    //todo move to helper
+    await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#0'})
 
     // set to follow contents as it arrives
     helper.contentWindow().$('#options-followContents').prop("checked", true);
