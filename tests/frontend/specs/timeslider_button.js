@@ -3,23 +3,21 @@ describe("timeslider button takes you to the timeslider of a pad", function(){
     helper.newPad(cb); // creates a new pad
   });
 
-  it("and URL contains timeslider", function(done){
-    var inner$ = helper.padInner$;
+  it("sends an edit, goes to timeslider and URL contains timeslider", function(done){
 
-    // get the first text element inside the editable space
-    var $firstTextElement = inner$("div span").first();
-    var originalValue = $firstTextElement.text(); // get the original value
-    $firstTextElement.sendkeys("Testing"); // send line 1 to the pad
-
-    var modifiedValue = $firstTextElement.text(); // get the modified value
-    expect(modifiedValue).not.to.be(originalValue); // expect the value to change
-
-    helper.gotoTimesliderviaButton()
+    var firstLine = helper.textLines()[0];
+    helper.divLines()[0].sendkeys('Testing');
+    helper.waitFor(function (){
+      return 'Testing'+firstLine === helper.textLines()[0];
+    })
     .done(function(){
-      var inTimeslider = !!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/);
-      expect(inTimeslider).to.be(true);
-      done();
-    });
+      helper.gotoTimesliderviaButton()
+      .done(function(){
+        var inTimeslider = !!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/);
+        expect(inTimeslider).to.be(true);
+        done();
+      });
+    })
   });
 });
 

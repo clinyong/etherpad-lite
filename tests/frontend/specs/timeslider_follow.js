@@ -37,7 +37,6 @@ describe("timeslider", function(){
     return helper.waitFor(function(){
       return helper.textLines().length === lines + message.split('\n').length - 1;
     })
-
   }
 
 });
