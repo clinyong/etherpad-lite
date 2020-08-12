@@ -141,19 +141,19 @@ async function edit(message){
     // to `helper.gotoTimeslider(XXX)`. 
     await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#3'})
 
-    expect(helper.contentWindow().$('#exportplaina').attr('href')).to.match("/3/export/txt");
+    expect(helper.contentWindow().$('#exportplaina').attr('href')).to.match(/\/3\/export\/txt/);
 
     // revision 0
     helper.sliderClick(20);
 
     await helper.waitForPromise(function(){
-      return helper.contentWindow().$('#exportplaina').attr('href').match("/0/export/txt");
+      return helper.contentWindow().$('#exportplaina').attr('href').match(/\/0\/export\/txt/);
     })
 
     // click the play button to move to latest revision
     helper.contentWindow().$('#playpause_button_icon').click()
     await helper.waitForPromise(function(){
-      return helper.contentWindow().$('#exportplaina').attr('href').match("/3/export/txt");
+      return helper.contentWindow().$('#exportplaina').attr('href').match(/\/3\/export\/txt/);
     })
   });
 });
