@@ -1,4 +1,4 @@
-describe("timeslider", function(){
+describe("timeslider labels", function(){
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb);
@@ -17,6 +17,7 @@ describe("timeslider", function(){
     }
 
     await helper.gotoTimeslider();
+    await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#'+revs})
 
     // the datetime of last edit
     let timerTimeOld = new Date(helper.timesliderTimerTime()).getTime();

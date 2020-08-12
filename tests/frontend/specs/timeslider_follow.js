@@ -1,10 +1,10 @@
-describe("timeslider", function(){
+describe("timeslider follow", function(){
   //create a new pad before each test run
   before(function(cb){
     helper.newPad(cb);
   });
 
-  it("follow content as it's added to timeslider", async function() {
+  it("content as it's added to timeslider", async function() {
 
     // send 3 revisions
     var revs = 3;
