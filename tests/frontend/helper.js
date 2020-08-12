@@ -535,7 +535,7 @@ var helper = {};
     var iframe = $('#iframe-container iframe');
     iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
     return helper.waitForPromise(function(){return helper.timesliderTimerTime()
-      && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },5000);
+      && !Number.isNaN(helper.timesliderTimerTime().getTime()) },5000);
   }
 
   /**
@@ -546,7 +546,7 @@ var helper = {};
     if (!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/)){
       helper.timesliderButton().click();
       return helper.waitForPromise(function(){return helper.timesliderTimerTime()
-        && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },10000);
+        && !Number.isNaN(helper.timesliderTimerTime().getTime()) },10000);
     }
   }
 
