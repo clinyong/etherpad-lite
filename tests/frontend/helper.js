@@ -380,6 +380,27 @@ var helper = {};
   }
 
   /**
+   * The ui-slidar-bar element in the timeslider
+   */
+  helper.sliderBar = function(){
+    return helper.contentWindow().$('#ui-slider-bar')
+  }
+
+  /**
+   * revision_date element
+   */
+  helper.revisionDateElem = function(){
+    return helper.contentWindow().$('#revision_date')
+  }
+
+  /**
+   * revision_label element
+   */
+  helper.revisionLabelElem = function(){
+    return helper.contentWindow().$('#revision_label')
+  }
+
+  /**
    * The pad text as an array of lines
    *
    * @returns {Array.<string>} lines of text
@@ -510,8 +531,9 @@ var helper = {};
    * @param {number} [revision] the optional revision
    */
   helper.gotoTimeslider = function(revision){
-    $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider' +
-    (revision.toString() ? '#'+revision : ''));
+    revision = revision ? revision.toString() : '';
+    var iframe = $('#iframe-container iframe');
+    iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
     return helper.waitFor(function(){return helper.timesliderTimerTime()
       && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },5000);
   }

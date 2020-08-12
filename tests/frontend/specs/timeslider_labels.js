@@ -4,58 +4,76 @@ describe("timeslider", function(){
     helper.newPad(cb);
   });
 
-  it("Shows a date and time in the timeslider and make sure it doesn't include NaN", function(done) {
-    var inner$ = helper.padInner$;
+  it("Shows a date and time in the timeslider and make sure it doesn't include NaN", async function() {
 
-    // make some changes to produce 100 revisions
-    var revs = 10;
-    for(var i=0; i < revs; i++) {
-      setTimeout(function() {
-        // enter 'a' in the first text element
-        inner$("div").first().sendkeys('a');
-      }, 200);
+    // make some changes to produce 3 revisions
+    let revs = 3;
+
+    for(let i=0; i < revs; i++) {
+      await edit('a\n');
     }
 
-    setTimeout(function() {
-      // go to timeslider
-      $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider');
+    await helper.gotoTimeslider();
 
-      setTimeout(function() {
-        var timeslider$ = $('#iframe-container iframe')[0].contentWindow.$;
-        var $sliderBar = timeslider$('#ui-slider-bar');
+    // the datetime of last edit
+    let timerTimeOld = new Date(helper.timesliderTimerTime()).getTime();
 
-        var latestContents = timeslider$('#padcontent').text();
+    // the day of this revision, e.g. August 12, 2020
+    let dateOld = new Date(helper.revisionDateElem().text()).getTime();
 
-        // Expect the date and time to be shown
+    // the label/revision, e.g. Version 3
+    let labelOld = helper.revisionLabelElem().text();
+    let labelMatcher = new RegExp('Version '+revs);
 
-        // Click somewhere on the timeslider
-        var e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 45;
-        $sliderBar.trigger(e);
+    // the datetime should be a date
+    expect( Number.isNaN(timerTimeOld)).to.eql(false);
 
-        e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 40;
-        $sliderBar.trigger(e);
+    // the Date object of the day should not be NaN
+    expect( Number.isNaN(dateOld) ).to.eql(false)
 
-        e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 50;
-        $sliderBar.trigger(e);
+    // the label should match Version `Number`
+    expect( labelOld ).to.match( labelMatcher );
 
-        $sliderBar.trigger('mouseup')
 
-        setTimeout(function() {
-          //make sure the text has changed
-          expect( timeslider$('#timer').text() ).not.to.eql( "" );
-          expect( timeslider$('#revision_date').text() ).not.to.eql( "" );
-          expect( timeslider$('#revision_label').text() ).not.to.eql( "" );
-          var includesNaN = timeslider$('#revision_label').text().indexOf("NaN"); // NaN is bad. Naan ist gut
-          expect( includesNaN ).to.eql( -1 ); // not quite so tasty, I like curry.
-          done();
-        }, 400);
-      }, 2000);
-    }, 2000);
+    let sliderBar = helper.sliderBar();
+
+    // Click somewhere left on the timeslider to go to revision 0
+    let e = new jQuery.Event('mousedown');
+    e.pageX = 30;
+    e.pageY = sliderBar.offset().top;
+    sliderBar.trigger(e);
+    sliderBar.trigger('mouseup');
+
+    // the datetime of last edit
+    let timerTime = new Date(helper.timesliderTimerTime()).getTime();
+
+    // the day of this revision, e.g. August 12, 2020
+    let date = new Date(helper.revisionDateElem().text()).getTime();
+
+    // the label/revision, e.g. Version 0
+    let label = helper.revisionLabelElem().text();
+
+    // the datetime should be a date
+    expect( Number.isNaN(timerTime)).to.eql(false);
+    // the old revision should be older or have the same time
+    expect(timerTimeOld - timerTime >= 0);
+
+    // the Date object of the day should not be NaN
+    expect( Number.isNaN(date) ).to.eql(false)
+
+    // the label should match Version 0
+    expect( label ).to.match( /Version 0/);
   });
 });
+
+/**
+ * Sends the edit to the last line and waits until its written
+ */
+async function edit(message){
+  let lines = helper.textLines().length
+  helper.divLines()[lines-1].sendkeys(message);
+  return helper.waitFor(function(){
+    return helper.textLines().length === lines + message.split('\n').length - 1;
+  })
+}
+
