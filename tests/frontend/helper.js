@@ -384,7 +384,7 @@ var helper = {};
    *
    * @returns {Array.<string>} lines of text
    */
-  helper.fulltext = function(){
+  helper.textLines = function(){
     return helper.padInner$('.ace-line').map(function(){
       return $(this).text()
     }).get()
@@ -398,7 +398,7 @@ var helper = {};
    *
    * @returns {Array.<HTMLElement>} array of divs
    */
-  helper.linesElem = function(){
+  helper.divLines = function(){
     return helper.padInner$('.ace-line').map(function(){
       return $(this)
     })

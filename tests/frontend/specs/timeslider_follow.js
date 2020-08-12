@@ -32,10 +32,10 @@ describe("timeslider", function(){
    * Sends the edit to the last line and waits until its written
    */
   async function edit(message){
-    var lines = helper.fulltext().length
-    helper.linesElem()[lines-1].sendkeys(message);
+    var lines = helper.textLines().length
+    helper.divLines()[lines-1].sendkeys(message);
     return helper.waitFor(function(){
-      return helper.fulltext().length === lines + message.split('\n').length - 1;
+      return helper.textLines().length === lines + message.split('\n').length - 1;
     })
 
   }
