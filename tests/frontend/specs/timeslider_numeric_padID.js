@@ -1,65 +1,49 @@
 describe("timeslider", function(){
-  var padId = 735773577357+(Math.round(Math.random()*1000));
+  let padId = 735773577357+(Math.round(Math.random()*1000000000));
 
   //create a new pad before each test run
   beforeEach(function(cb){
     helper.newPad(cb, padId);
   });
 
-  it("Makes sure the export URIs are as expected when the padID is numeric", function(done) {
-    var inner$ = helper.padInner$;
+  it("Makes sure the export URIs are as expected when the padID is numeric", async function() {
 
-    // make some changes to produce 100 revisions
-    var revs = 10;
-    for(var i=0; i < revs; i++) {
-      setTimeout(function() {
-        // enter 'a' in the first text element
-        inner$("div").first().sendkeys('a');
-      }, 100);
+    // make some changes to produce 1 revision
+    for(let i=0; i < 1; i++) {
+      await edit('a\n');
     }
 
-    setTimeout(function() {
-      // go to timeslider
-      $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider');
+    await helper.gotoTimeslider(1);
 
-      setTimeout(function() {
-        var timeslider$ = $('#iframe-container iframe')[0].contentWindow.$;
-        var $sliderBar = timeslider$('#ui-slider-bar');
+    // expect URI to be similar to
+    // http://192.168.1.48:9001/p/2/2/export/html
+    // http://192.168.1.48:9001/p/735773577399/0/export/html
+    let rev1ExportLink = helper.contentWindow().$('#exporthtmla').attr('href');
+    let rev1Regex = new RegExp(padId + "/1/export/html");
+    expect(rev1ExportLink).to.match(rev1Regex);
 
-        var latestContents = timeslider$('#padcontent').text();
 
-        // Expect the date and time to be shown
+    // Click somewhere left on the timeslider to go to revision 0
+    let sliderBar = helper.sliderBar();
+    let e = new jQuery.Event('mousedown');
+    e.pageX = 30;
+    e.pageY = sliderBar.offset().top;
+    sliderBar.trigger(e);
+    sliderBar.trigger('mouseup');
 
-        // Click somewhere on the timeslider
-        var e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 45;
-        $sliderBar.trigger(e);
-
-        e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 40;
-        $sliderBar.trigger(e);
-
-        e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 50;
-        $sliderBar.trigger(e);
-
-        $sliderBar.trigger('mouseup')
-
-        setTimeout(function() {
-          // expect URI to be similar to
-          // http://192.168.1.48:9001/p/2/2/export/html
-          // http://192.168.1.48:9001/p/735773577399/0/export/html
-          var exportLink = timeslider$('#exporthtmla').attr('href');
-          var checkVal = padId + "/0/export/html";
-          var includesCorrectURI = exportLink.indexOf(checkVal);
-          //todo
-          expect(includesCorrectURI).to.not.be(-1);
-          done();
-        }, 400);
-      }, 2000);
-    }, 2000);
+    let rev0ExportLink = helper.contentWindow().$('#exporthtmla').attr('href');
+    let rev0Regex = new RegExp(padId + "/0/export/html");
+    expect(rev0ExportLink).to.match(rev0Regex);
   });
 });
+
+  /**
+   * Sends the edit to the last line and waits until its written
+   */
+  async function edit(message){
+    var lines = helper.textLines().length
+    helper.divLines()[lines-1].sendkeys(message);
+    return helper.waitFor(function(){
+      return helper.textLines().length === lines + message.split('\n').length - 1;
+    })
+  }

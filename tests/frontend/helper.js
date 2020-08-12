@@ -531,10 +531,10 @@ var helper = {};
    * @param {number} [revision] the optional revision
    */
   helper.gotoTimeslider = function(revision){
-    revision = revision ? revision.toString() : '';
+    revision = revision ? '#'+revision.toString() : '';
     var iframe = $('#iframe-container iframe');
     iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
-    return helper.waitFor(function(){return helper.timesliderTimerTime()
+    return helper.waitForPromise(function(){return helper.timesliderTimerTime()
       && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },5000);
   }
 
@@ -545,7 +545,7 @@ var helper = {};
   helper.gotoTimesliderviaButton = function(){
     if (!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/)){
       helper.timesliderButton().click();
-      return helper.waitFor(function(){return helper.timesliderTimerTime()
+      return helper.waitForPromise(function(){return helper.timesliderTimerTime()
         && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },10000);
     }
   }

@@ -4,6 +4,9 @@ describe("timeslider", function(){
     helper.newPad(cb);
   });
 
+  /**
+   * @todo test authorsList
+   */
   it("Shows a date and time in the timeslider and make sure it doesn't include NaN", async function() {
 
     // make some changes to produce 3 revisions
