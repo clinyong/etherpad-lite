@@ -3,110 +3,89 @@ describe("timeslider", function(){
   beforeEach(function(cb){
     helper.newPad(cb);
   });
+async function edit(message){
+  let lines = helper.textLines().length
+  helper.divLines()[lines-1].sendkeys(message);
+  return helper.waitForPromise(function(){
+    return helper.textLines().length  === lines + message.split('\n').length - 1;
+  })
+}
 
-  it("loads adds a hundred revisions", function(done) { // passes
-    var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
-
+  /**
+   *
+   * This test is slow and has nothing special in it 
+   * except save revision check thats now a separate test
+   * 
+   * @todo have tests for large revisions though
+   */
+  xit("loads adds a hundred revisions", async function() { // passes
     // make some changes to produce 100 revisions
-    var timePerRev = 900
-      , revs = 99;
-    this.timeout(revs*timePerRev+10000);
+    let revs = 99;
+    this.timeout(revs*900+20000);
     for(var i=0; i < revs; i++) {
-      setTimeout(function() {
-        // enter 'a' in the first text element
-        inner$("div").first().sendkeys('a');
-      }, timePerRev*i);
+      await edit('a\n')
     }
-    chrome$('.buttonicon-savedRevision').click();
 
-    setTimeout(function() {
-      // go to timeslider
-      $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider');
+    await helper.saveRevision();
 
-      setTimeout(function() {
-        var timeslider$ = $('#iframe-container iframe')[0].contentWindow.$;
-        var $sliderBar = timeslider$('#ui-slider-bar');
+    await helper.gotoTimeslider();
 
-        var latestContents = timeslider$('#innerdocbody').text();
+    var latestContents = helper.textLines().join('\n');
 
-        // Click somewhere on the timeslider
-        var e = new jQuery.Event('mousedown');
-        // sets y co-ordinate of the pad slider modal.
-        var base = (timeslider$('#ui-slider-bar').offset().top - 24)
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = base+5;
-        $sliderBar.trigger(e);
+    // Click somewhere left on the timeslider to go to revision 0
+    helper.sliderClick(30);
 
-        e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = base;
-        $sliderBar.trigger(e);
+    //make sure the text has changed
+    expect( helper.textLines().join('\n') ).not.to.eql( latestContents );
 
-        e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = base-5;
-        $sliderBar.trigger(e);
-
-        $sliderBar.trigger('mouseup')
-
-        setTimeout(function() {
-          //make sure the text has changed
-          expect( timeslider$('#innerdocbody').text() ).not.to.eql( latestContents );
-          var starIsVisible = timeslider$('.star').is(":visible");
-          expect( starIsVisible ).to.eql( true );
-          done();
-        }, 1000);
-
-      }, 6000);
-    }, revs*timePerRev);
+    // there should only be one saved revision star at this point
+    expect(helper.savedRevisionStars.is(":visible") === true);
   });
 
 
-  // Disabled as jquery trigger no longer works properly
-  xit("changes the url when clicking on the timeslider", function(done) {
-    var inner$ = helper.padInner$;
+  it("changes the url when clicking on the timeslider", async function() {
 
     // make some changes to produce 7 revisions
-    var timePerRev = 1000
-      , revs = 20;
-    this.timeout(revs*timePerRev+10000);
+    var timePerRev = 900
+      , revs = 7;
+    this.timeout(revs*timePerRev+20000);
     for(var i=0; i < revs; i++) {
-      setTimeout(function() {
-        // enter 'a' in the first text element
-        inner$("div").first().sendkeys('a');
-      }, timePerRev*i);
+      await edit('a\n')
     }
 
-    setTimeout(function() {
-      // go to timeslider
-      $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider');
+    // open the timeslider at revision 3
+    await helper.gotoTimeslider(3);
 
-      setTimeout(function() {
-        var timeslider$ = $('#iframe-container iframe')[0].contentWindow.$;
-        var $sliderBar = timeslider$('#ui-slider-bar');
+    // @todo
+    // move the check if `helper.gotoTimeslider(XXX)` is at revision XXX
+    // to `helper.gotoTimeslider(XXX)`. 
+    await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#3'})
 
-        var latestContents = timeslider$('#innerdocbody').text();
-        var oldUrl = $('#iframe-container iframe')[0].contentWindow.location.hash;
+    // click somewhere left to go to revision 0
+    helper.sliderClick(20);
 
-        // Click somewhere on the timeslider
-        var e = new jQuery.Event('mousedown');
-        e.clientX = e.pageX = 150;
-        e.clientY = e.pageY = 60;
-        $sliderBar.trigger(e);
+    await helper.waitForPromise(function(){
+      return helper.contentWindow().location.hash === '#0';
+    })
 
-        helper.waitFor(function(){
-          return $('#iframe-container iframe')[0].contentWindow.location.hash != oldUrl;
-        }, 6000).always(function(){
-          expect( $('#iframe-container iframe')[0].contentWindow.location.hash ).not.to.eql( oldUrl );
-          done();
-        });
-      }, 6000);
-    }, revs*timePerRev);
+    // this should right enough to go to another revision
+    helper.sliderClick(400); 
+    await helper.waitForPromise(function(){
+      return helper.contentWindow().location.hash > '#0';
+    })
+
+    let oldRev = helper.contentWindow().location.hash;
+
+    // this should be even more right enough to go to another revision
+    helper.sliderClick(700); 
+
+    await helper.waitForPromise(function(){
+      return helper.contentWindow().location.hash > oldRev;
+    })
+
   });
-  it("jumps to a revision given in the url", function(done) {
+  xit("jumps to a revision given in the url", function(done) {
     var inner$ = helper.padInner$;
-    var chrome$ = helper.padChrome$;
     this.timeout(40000);
 
     // wait for the text to be loaded
@@ -149,31 +128,32 @@ describe("timeslider", function(){
     });
   });
 
-  it("checks the export url", function(done) {
-    var inner$ = helper.padInner$;
-    this.timeout(11000);
-    inner$("div").first().sendkeys('a');
+  it("checks the export url when using timeslider bar", async function() {
+    let revs = 3;
+    this.timeout(revs*900+20000);
+    for(var i=0; i < revs; i++) {
+      await edit('a\n')
+    }
+    await helper.gotoTimeslider(3)
 
-    setTimeout(function() {
-      // go to timeslider
-      $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider#0');
-      var timeslider$;
-      var exportLink;
+    // @todo
+    // move the check if `helper.gotoTimeslider(XXX)` is at revision XXX
+    // to `helper.gotoTimeslider(XXX)`. 
+    await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#3'})
 
-      helper.waitFor(function(){
-        try{
-          timeslider$ = $('#iframe-container iframe')[0].contentWindow.$;
-        }catch(e){}
-        if(!timeslider$)
-          return false;
-        exportLink = timeslider$('#exportplaina').attr('href');
-        if(!exportLink)
-          return false;
-        return exportLink.substr(exportLink.length - 12) == "0/export/txt";
-      }, 6000).always(function(){
-        expect( exportLink.substr(exportLink.length - 12) ).to.eql( "0/export/txt" );
-        done();
-      });
-    }, 2500);
+    expect(helper.contentWindow().$('#exportplaina').attr('href')).to.match("/3/export/txt");
+
+    // revision 0
+    helper.sliderClick(20);
+
+    await helper.waitForPromise(function(){
+      return helper.contentWindow().$('#exportplaina').attr('href').match("/0/export/txt");
+    })
+
+    // click the play button to move to latest revision
+    helper.contentWindow().$('#playpause_button_icon').click()
+    await helper.waitForPromise(function(){
+      return helper.contentWindow().$('#exportplaina').attr('href').match("/3/export/txt");
+    })
   });
 });

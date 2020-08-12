@@ -3,21 +3,16 @@ describe("timeslider button takes you to the timeslider of a pad", function(){
     helper.newPad(cb); // creates a new pad
   });
 
-  it("sends an edit, goes to timeslider and URL contains timeslider", function(done){
+  it("sends an edit, goes to timeslider and URL contains timeslider", async function(){
 
     var firstLine = helper.textLines()[0];
     helper.divLines()[0].sendkeys('Testing');
-    helper.waitFor(function (){
+    await helper.waitForPromise(function (){
       return 'Testing'+firstLine === helper.textLines()[0];
     })
-    .done(function(){
-      helper.gotoTimesliderviaButton()
-      .done(function(){
-        var inTimeslider = !!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/);
-        expect(inTimeslider).to.be(true);
-        done();
-      });
-    })
+    await helper.gotoTimesliderviaButton()
+    let inTimeslider = !!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/);
+    expect(inTimeslider).to.be(true);
   });
 });
 

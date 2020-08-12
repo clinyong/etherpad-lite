@@ -16,10 +16,10 @@ describe("timeslider", function(){
     await helper.gotoTimeslider(0);
 
     // set to follow contents as it arrives
-    helper.contentWindow.$('#options-followContents').prop("checked", true);
+    helper.contentWindow().$('#options-followContents').prop("checked", true);
 
-    var originalTop = helper.contentWindow.$('#innerdocbody').offset();
-    helper.contentWindow.$('#playpause_button_icon').click();
+    var originalTop = helper.contentWindow().$('#innerdocbody').offset();
+    helper.contentWindow().$('#playpause_button_icon').click();
 
     let newTop;
     return helper.waitForPromise(function(){

@@ -2,7 +2,7 @@ describe("timeslider", function(){
   let padId = 735773577357+(Math.round(Math.random()*1000000000));
 
   //create a new pad before each test run
-  beforeEach(function(cb){
+  before(function(cb){
     helper.newPad(cb, padId);
   });
 
@@ -14,6 +14,7 @@ describe("timeslider", function(){
     }
 
     await helper.gotoTimeslider(1);
+    await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#1'})
 
     // expect URI to be similar to
     // http://192.168.1.48:9001/p/2/2/export/html
