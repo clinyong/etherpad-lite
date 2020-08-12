@@ -13,6 +13,7 @@ describe("timeslider button takes you to the timeslider of a pad", function(){
 
     var modifiedValue = $firstTextElement.text(); // get the modified value
     expect(modifiedValue).not.to.be(originalValue); // expect the value to change
+
     helper.gotoTimesliderviaButton()
     .done(function(){
       var inTimeslider = !!helper.padChrome$.window.location.href.match(/\/timeslider(?:#[0-9]+)?$/);

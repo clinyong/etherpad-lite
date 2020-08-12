@@ -1,54 +1,44 @@
 describe("timeslider", function(){
   //create a new pad before each test run
-  beforeEach(function(cb){
+  before(function(cb){
     helper.newPad(cb);
   });
 
-  it("follow content as it's added to timeslider", function(done) { // passes
-    var inner$ = helper.padInner$;
+  it("follow content as it's added to timeslider", async function() {
 
-    // make some changes to produce 100 revisions
-    var timePerRev = 900
-      , revs = 10;
-    this.timeout(revs*timePerRev+10000);
-    for(var i=0; i < revs; i++) {
-      setTimeout(function() {
-        // enter 'a' in the first text element
-        inner$("div").last().sendkeys('a\n');
-        inner$("div").last().sendkeys('{enter}');
-        inner$("div").last().sendkeys('{enter}');
-        inner$("div").last().sendkeys('{enter}');
-        inner$("div").last().sendkeys('{enter}');
-      }, timePerRev*i);
+    // send 3 revisions
+    var revs = 3;
+    var message = 'a\n\n\n\n\n\n\n\n\n\n';
+    for (var i=0;i<revs;i++){
+      await edit(message)
     }
 
-    //todo
-    setTimeout(function() {
-      // go to timeslider
-      $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider#0');
+    await helper.gotoTimeslider(0);
 
-      setTimeout(function() {
-        var timeslider$ = $('#iframe-container iframe')[0].contentWindow.$;
-        var $sliderBar = timeslider$('#ui-slider-bar');
+    // set to follow contents as it arrives
+    helper.contentWindow.$('#options-followContents').prop("checked", true);
 
-        var latestContents = timeslider$('#innerdocbody').text();
+    var originalTop = helper.contentWindow.$('#innerdocbody').offset();
+    helper.contentWindow.$('#playpause_button_icon').click();
 
-        // set to follow contents as it arrives
-        timeslider$('#options-followContents').prop("checked", true);
+    let newTop;
+    return helper.waitForPromise(function(){
+      newTop = helper.contentWindow.$('#innerdocbody').offset();
+      return newTop.top < originalTop.top;
+    })
+  })
 
-        var originalTop = timeslider$('#innerdocbody').offset();
-        timeslider$('#playpause_button_icon').click();
+  /**
+   * Sends the edit to the last line and waits until its written
+   */
+  async function edit(message){
+    var lines = helper.fulltext().length
+    helper.linesElem()[lines-1].sendkeys(message);
+    return helper.waitFor(function(){
+      return helper.fulltext().length === lines + message.split('\n').length - 1;
+    })
 
-        setTimeout(function() {
-          //make sure the text has changed
-          var newTop = timeslider$('#innerdocbody').offset();
-          expect( originalTop ).not.to.eql( newTop );
-          done();
-        }, 1000);
-
-      }, 2000);
-    }, revs*timePerRev);
-  });
+  }
 
 });
 

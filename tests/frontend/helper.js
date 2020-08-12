@@ -197,6 +197,38 @@ var helper = {};
     return deferred;
   }
 
+  /**
+   * Same as `waitFor` but using Promises
+   *
+   */
+  helper.waitForPromise = function(conditionFunc, _timeoutTime, _intervalTime){
+    var timeoutTime = _timeoutTime || 1900;
+    var intervalTime = _intervalTime || 10;
+
+    var promise = new Promise((resolve, reject) => {
+      var intervalCheck = setInterval(function(){
+        var passed = false;
+
+        passed = conditionFunc();
+
+        if(passed){
+          clearInterval(intervalCheck);
+          clearTimeout(timeout);
+
+          resolve();
+        }
+      }, intervalTime);
+
+      var timeout = setTimeout(function(){
+        clearInterval(intervalCheck);
+        var error = new Error("wait for condition never became true " + conditionFunc.toString());
+        reject(error);
+
+      }, timeoutTime);
+    })
+    return promise;
+  }
+
   helper.selectLines = function($startLine, $endLine, startOffset, endOffset){
     // if no offset is provided, use beginning of start line and end of end line
     startOffset = startOffset || 0;
@@ -479,7 +511,7 @@ var helper = {};
    */
   helper.gotoTimeslider = function(revision){
     $('#iframe-container iframe').attr('src', $('#iframe-container iframe').attr('src')+'/timeslider' +
-    (revision ? '#'+revision : ''));
+    (revision.toString() ? '#'+revision : ''));
     return helper.waitFor(function(){return helper.timesliderTimerTime()
       && helper.timesliderTimerTime().match(/[a-z\/: ]+/) },5000);
   }
