@@ -23,7 +23,7 @@ describe("timeslider", function(){
 
     let newTop;
     return helper.waitForPromise(function(){
-      newTop = helper.contentWindow.$('#innerdocbody').offset();
+      newTop = helper.contentWindow().$('#innerdocbody').offset();
       return newTop.top < originalTop.top;
     })
   })
