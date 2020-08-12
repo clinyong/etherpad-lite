@@ -367,8 +367,7 @@ var helper = {};
    *
    * @returns {HTMLElement} timer
    */
-  helper.timesliderTimerTime = function(){return helper.contentWindow().$
-      && helper.contentWindow().$('#timer').text() };
+  helper.timesliderTimerTime = function(){return helper.timesliderTimer().text()}
 
   /**
    * the contentWindow is either the normal pad or timeslider
