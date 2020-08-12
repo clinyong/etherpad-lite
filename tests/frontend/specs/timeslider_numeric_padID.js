@@ -24,12 +24,7 @@ describe("timeslider", function(){
 
 
     // Click somewhere left on the timeslider to go to revision 0
-    let sliderBar = helper.sliderBar();
-    let e = new jQuery.Event('mousedown');
-    e.pageX = 30;
-    e.pageY = sliderBar.offset().top;
-    sliderBar.trigger(e);
-    sliderBar.trigger('mouseup');
+    helper.sliderClick(30);
 
     let rev0ExportLink = helper.contentWindow().$('#exporthtmla').attr('href');
     let rev0Regex = new RegExp(padId + "/0/export/html");

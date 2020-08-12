@@ -551,6 +551,30 @@ var helper = {};
   }
 
   /**
+   * Saves a revision
+   * @todo wait for SAVE_REVISION message from server
+   */
+  helper.saveRevision = function(){
+    helper.saveRevisionButton().click()
+    return helper.waitForPromise(function(){return $('.saved-revision').is(':visible')})
+  }
+
+  /**
+   * The save revision button
+   */
+  helper.saveRevisionButton = function(){
+    return $('.buttonicon-savedRevision');
+  }
+
+  /**
+   * An array of divs that represent the saved revisions
+   * @todo check position etc
+   */
+  helper.savedRevisionStars = function(){
+    return $('.star')
+  }
+
+  /**
    * Sends a chat `message` via `sendKeys`
    *
    * @param {string} message the chat message to be sent
@@ -559,6 +583,23 @@ var helper = {};
     helper.padChrome$("#chatinput").sendkeys(message)
   }
 
+  /**
+   * Clicks in the timeslider at a specific offset
+   * It's used to navigate the timeslider
+   *
+   * @todo no mousemove test
+   * @param {number} X coordinate
+   */
+  helper.sliderClick = function(X){
+    let sliderBar = helper.sliderBar()
+    let edown = new jQuery.Event('mousedown');
+    let eup = new jQuery.Event('mouseup');
+    edown.clientX = eup.clientX = X;
+    edown.clientY = eup.clientY = sliderBar.offset().top;
+
+    sliderBar.trigger(edown);
+    sliderBar.trigger(eup);
+  }
 
   /**
    * UI

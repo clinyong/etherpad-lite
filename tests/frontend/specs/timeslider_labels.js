@@ -38,14 +38,8 @@ describe("timeslider", function(){
     expect( labelOld ).to.match( labelMatcher );
 
 
-    let sliderBar = helper.sliderBar();
-
     // Click somewhere left on the timeslider to go to revision 0
-    let e = new jQuery.Event('mousedown');
-    e.pageX = 30;
-    e.pageY = sliderBar.offset().top;
-    sliderBar.trigger(e);
-    sliderBar.trigger('mouseup');
+    helper.sliderClick(30);
 
     // the datetime of last edit
     let timerTime = new Date(helper.timesliderTimerTime()).getTime();
