@@ -13,10 +13,10 @@ describe("timeslider labels", function(){
     let revs = 3;
 
     for(let i=0; i < revs; i++) {
-      await edit('a\n');
+      await helper.edit('a\n');
     }
 
-    await helper.gotoTimeslider();
+    await helper.gotoTimeslider(revs);
     await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#'+revs})
 
     // the datetime of last edit
@@ -63,15 +63,3 @@ describe("timeslider labels", function(){
     expect( label ).to.match( /Version 0/);
   });
 });
-
-/**
- * Sends the edit to the last line and waits until its written
- */
-async function edit(message){
-  let lines = helper.textLines().length
-  helper.divLines()[lines-1].sendkeys(message);
-  return helper.waitFor(function(){
-    return helper.textLines().length === lines + message.split('\n').length - 1;
-  })
-}
-

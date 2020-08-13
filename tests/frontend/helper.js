@@ -145,6 +145,12 @@ var helper = {};
         helper.padOuter$.fx.off = true;
         helper.padInner$.fx.off = true;
 
+        //reset on every pad reload
+        helper.chatMessages = [];
+        helper.commits = [];
+        helper.userInfos = [];
+        helper.spyOnSocketIO();
+
         opts.cb();
       }).fail(function(){
         if (helper.retry > 3) {
@@ -536,10 +542,8 @@ var helper = {};
    */
   helper.gotoTimeslider = function(revision){
     revision = Number.isInteger(revision) ? '#'+revision : '';
-    console.log("going to",revision)
     var iframe = $('#iframe-container iframe');
     iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
-    console.log("src is now",iframe.attr('src'))
     return helper.waitForPromise(function(){return helper.timesliderTimerTime()
       && !Number.isNaN(new Date(helper.timesliderTimerTime()).getTime()) },5000);
   }
@@ -587,6 +591,59 @@ var helper = {};
    */
   helper.sendChatMessage = function(message){
     helper.padChrome$("#chatinput").sendkeys(message)
+  }
+
+  /**
+   * Makes an edit via `sendkeys` and ensures ACCEPT_COMMIT
+   * is returned by the server
+   * It does not check if the ACCEPT_COMMIT is the edit sent
+   * @todo currently Sends the message to the last line of a pad
+   *
+   */
+
+  helper.edit = async function(message){
+    let editsNr = helper.commits.length;
+    var lines = helper.textLines().length
+    helper.divLines()[lines-1].sendkeys(message);
+    return helper.waitForPromise(function(){
+      return editsNr + 1 === helper.commits.length;//helper.textLines().length === lines + message.split('\n').length - 1;
+    })
+  }
+
+  /*
+   * Array of chat messages received
+   */
+  helper.chatMessages = [];
+
+  /*
+   * Array of changeset commits from the server
+   */
+  helper.commits = [];
+
+  /*
+   * Array of userInfo messages from the server
+   */
+  helper.userInfos = [];
+
+  /**
+   * Spys on socket.io messages and saves them into several arrays
+   * that are visible in tests
+   */
+  helper.spyOnSocketIO = function (){
+    helper.contentWindow().pad.socket.on('message', function(msg){
+      if (msg.type == "COLLABROOM") {
+
+        if (msg.data.type == 'ACCEPT_COMMIT') {
+          helper.commits.push(msg);
+        }
+        else if (msg.data.type == 'USER_NEWINFO') {
+          helper.userInfos.push(msg)
+        }
+        else if (msg.data.type == 'CHAT_MESSAGE') {
+          helper.chatMessages.push(msg)
+        }
+      }
+    })
   }
 
   /**

@@ -3,13 +3,6 @@ describe("timeslider revisions", function(){
   beforeEach(function(cb){
     helper.newPad(cb);
   });
-async function edit(message){
-  let lines = helper.textLines().length
-  helper.divLines()[lines-1].sendkeys(message);
-  return helper.waitForPromise(function(){
-    return helper.textLines().length  === lines + message.split('\n').length - 1;
-  })
-}
 
   /**
    *
@@ -23,7 +16,7 @@ async function edit(message){
     let revs = 99;
     this.timeout(revs*900+20000);
     for(var i=0; i < revs; i++) {
-      await edit('a\n')
+      await helper.edit('a\n')
     }
 
     await helper.saveRevision();
@@ -50,7 +43,7 @@ async function edit(message){
       , revs = 7;
     this.timeout(revs*timePerRev+20000);
     for(var i=0; i < revs; i++) {
-      await edit('a\n')
+      await helper.edit('a\n')
     }
 
     // open the timeslider at revision 3
@@ -132,7 +125,7 @@ async function edit(message){
     let revs = 3;
     this.timeout(revs*900+20000);
     for(var i=0; i < revs; i++) {
-      await edit('a\n')
+      await helper.edit('a\n')
     }
     await helper.gotoTimeslider(3)
 

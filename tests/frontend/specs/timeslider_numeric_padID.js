@@ -10,7 +10,7 @@ describe("timeslider", function(){
 
     // make some changes to produce 1 revision
     for(let i=0; i < 1; i++) {
-      await edit('a\n');
+      await helper.edit('a\n');
     }
 
     await helper.gotoTimeslider(1);
@@ -32,14 +32,3 @@ describe("timeslider", function(){
     expect(rev0ExportLink).to.match(rev0Regex);
   });
 });
-
-  /**
-   * Sends the edit to the last line and waits until its written
-   */
-  async function edit(message){
-    var lines = helper.textLines().length
-    helper.divLines()[lines-1].sendkeys(message);
-    return helper.waitFor(function(){
-      return helper.textLines().length === lines + message.split('\n').length - 1;
-    })
-  }
