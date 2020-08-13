@@ -23,7 +23,7 @@ describe("timeslider labels", function(){
     let timerTimeOld = new Date(helper.timesliderTimerTime()).getTime();
 
     // the day of this revision, e.g. August 12, 2020
-    let dateOld = new Date(helper.revisionDateElem().text()).getTime();
+    let dateOld = new Date(helper.revisionDateElem().substr(6)).getTime();
 
     // the label/revision, e.g. Version 3
     let labelOld = helper.revisionLabelElem().text();
@@ -46,7 +46,7 @@ describe("timeslider labels", function(){
     let timerTime = new Date(helper.timesliderTimerTime()).getTime();
 
     // the day of this revision, e.g. August 12, 2020
-    let date = new Date(helper.revisionDateElem().text()).getTime();
+    let date = new Date(helper.revisionDateElem().substr(6)).getTime();
 
     // the label/revision, e.g. Version 0
     let label = helper.revisionLabelElem().text();
