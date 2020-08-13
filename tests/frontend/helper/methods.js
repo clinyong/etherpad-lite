@@ -142,13 +142,16 @@ helper.sendChatMessage = function(message){
  * Makes an edit via `sendkeys` and ensures ACCEPT_COMMIT
  * is returned by the server
  * It does not check if the ACCEPT_COMMIT is the edit sent
+ *
+ * @param {string} message The edit to make
+ * @param {number} [lineNr] the optional line to make the edit on starting from 1
  * @todo currently Sends the message to the last line of a pad
  *
  */
-helper.edit = async function(message){
+helper.edit = async function(message, lineNr){
   let editsNr = helper.commits.length;
-  var lines = helper.textLines().length
-  helper.divLines()[lines-1].sendkeys(message);
+  lineNr = lineNr ? lineNr - 1 : helper.textLines().length - 1;
+  helper.divLines()[lineNr].sendkeys(message);
   return helper.waitForPromise(function(){
     return editsNr + 1 === helper.commits.length;//helper.textLines().length === lines + message.split('\n').length - 1;
   })
