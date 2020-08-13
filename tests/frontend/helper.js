@@ -535,9 +535,11 @@ var helper = {};
    * @param {number} [revision] the optional revision
    */
   helper.gotoTimeslider = function(revision){
-    revision = revision ? '#'+revision.toString() : '';
+    revision = Number.isInteger(revision) ? '#'+revision : '';
+    console.log("going to",revision)
     var iframe = $('#iframe-container iframe');
     iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
+    console.log("src is now",iframe.attr('src'))
     return helper.waitForPromise(function(){return helper.timesliderTimerTime()
       && !Number.isNaN(new Date(helper.timesliderTimerTime()).getTime()) },5000);
   }
