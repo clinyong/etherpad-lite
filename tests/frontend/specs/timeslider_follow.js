@@ -7,9 +7,9 @@ describe("timeslider follow", function(){
   it("content as it's added to timeslider", async function() {
 
     // send 3 revisions
-    var revs = 3;
-    var message = 'a\n\n\n\n\n\n\n\n\n\n';
-    for (var i=0;i<revs;i++){
+    let revs = 3;
+    let message = 'a\n\n\n\n\n\n\n\n\n\n';
+    for (let i=0;i<revs;i++){
       await helper.edit(message)
     }
 
@@ -20,7 +20,7 @@ describe("timeslider follow", function(){
     // set to follow contents as it arrives
     helper.contentWindow().$('#options-followContents').prop("checked", true);
 
-    var originalTop = helper.contentWindow().$('#innerdocbody').offset();
+    let originalTop = helper.contentWindow().$('#innerdocbody').offset();
     helper.contentWindow().$('#playpause_button_icon').click();
 
     let newTop;

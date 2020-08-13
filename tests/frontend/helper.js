@@ -400,7 +400,7 @@ var helper = {};
    * revision_date element
    */
   helper.revisionDateElem = function(){
-    return helper.contentWindow().$('#revision_date')
+    return helper.contentWindow().$('#revision_date').substr(6);
   }
 
   /**
