@@ -545,7 +545,7 @@ var helper = {};
     var iframe = $('#iframe-container iframe');
     iframe.attr('src', iframe.attr('src')+'/timeslider' + revision);
     return helper.waitForPromise(function(){return helper.timesliderTimerTime()
-      && !Number.isNaN(new Date(helper.timesliderTimerTime()).getTime()) },5000);
+      && !Number.isNaN(new Date(helper.timesliderTimerTime()).getTime()) },10000);
   }
 
   /**
