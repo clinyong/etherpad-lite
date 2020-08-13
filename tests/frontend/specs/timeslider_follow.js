@@ -16,11 +16,10 @@ describe("timeslider follow", function(){
     await helper.gotoTimeslider(0);
     //todo move to helper
     await helper.waitForPromise(function(){return helper.contentWindow().location.hash === '#0'})
+    let originalTop = helper.contentWindow().$('#innerdocbody').offset();
 
     // set to follow contents as it arrives
     helper.contentWindow().$('#options-followContents').prop("checked", true);
-
-    let originalTop = helper.contentWindow().$('#innerdocbody').offset();
     helper.contentWindow().$('#playpause_button_icon').click();
 
     let newTop;
