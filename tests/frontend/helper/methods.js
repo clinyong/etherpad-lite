@@ -221,6 +221,16 @@ helper.textLines = function(){
     return $(this).text()
   }).get()
 }
+/**
+ * The timeslider text as an array of lines
+ *
+ * @returns {Array.<string>} lines of text
+ */
+helper.timesliderTextLines = function(){
+  return helper.contentWindow().$('.ace-line').map(function(){
+    return $(this).text()
+  }).get()
+}
 
 /**
  * The pad text as an array of divs

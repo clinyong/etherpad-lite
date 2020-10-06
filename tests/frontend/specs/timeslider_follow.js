@@ -1,6 +1,6 @@
 describe("timeslider follow", function(){
   //create a new pad before each test run
-  before(function(cb){
+  beforeEach(function(cb){
     helper.newPad(cb);
   });
 
@@ -26,6 +26,41 @@ describe("timeslider follow", function(){
     return helper.waitForPromise(function(){
       newTop = helper.contentWindow().$('#innerdocbody').offset();
       return newTop.top < originalTop.top;
+    })
+  })
+
+  it("follows only to lines that exist in the current pad view", async function(){
+    // TODO
+    let rev0text = helper.textLines()[0];
+    let rev1text = "\xa0"; // timeslider will add &nbsp;
+    let rev2text = 'Test line'
+
+    helper.padInner$('body').empty();
+    await helper.waitForPromise(function(){
+      return helper.commits.length === 1; 
+    })
+    await helper.edit(rev2text)
+
+    await helper.gotoTimeslider();
+
+    helper.contentWindow().$('#leftstep').click();
+    await helper.waitForPromise(function(){
+      return helper.timesliderTextLines()[0] === rev1text;
+    })
+
+    helper.contentWindow().$('#leftstep').click();
+    await helper.waitForPromise(function(){
+      return helper.timesliderTextLines()[0] === rev0text;
+    })
+
+    helper.contentWindow().$('#rightstep').click();
+    await helper.waitForPromise(function(){
+      return helper.timesliderTextLines()[0] === rev1text;
+    })
+
+    helper.contentWindow().$('#rightstep').click();
+    return helper.waitForPromise(function(){
+      return helper.timesliderTextLines()[0] === rev2text;
     })
   })
 });
