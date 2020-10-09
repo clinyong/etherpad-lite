@@ -197,6 +197,38 @@ var helper = {};
     return deferred;
   }
 
+  /**
+   * Same as `waitFor` but using Promises
+   *
+   */
+  helper.waitForPromise = function(conditionFunc, _timeoutTime, _intervalTime){
+    var timeoutTime = _timeoutTime || 1900;
+    var intervalTime = _intervalTime || 10;
+
+    var promise = new Promise((resolve, reject) => {
+      var intervalCheck = setInterval(function(){
+        var passed = false;
+
+        passed = conditionFunc();
+
+        if(passed){
+          clearInterval(intervalCheck);
+          clearTimeout(timeout);
+
+          resolve();
+        }
+      }, intervalTime);
+
+      var timeout = setTimeout(function(){
+        clearInterval(intervalCheck);
+        var error = new Error("wait for condition never became true " + conditionFunc.toString());
+        reject(error);
+
+      }, timeoutTime);
+    })
+    return promise;
+  }
+
   helper.selectLines = function($startLine, $endLine, startOffset, endOffset){
     // if no offset is provided, use beginning of start line and end of end line
     startOffset = startOffset || 0;
@@ -259,16 +291,4 @@ var helper = {};
   /* Ensure console.log doesn't blow up in IE, ugly but ok for a test framework imho*/
   window.console = window.console || {};
   window.console.log = window.console.log || function(){}
-
-  //force usage of callbacks in it
-  var _it = it;
-  it = function(name, func){
-    if(func && func.length !== 1){
-      func = function(){
-        throw new Error("Please use always a callback with it() - " + func.toString());
-      }
-    }
-
-    _it(name, func);
-  }
 })()

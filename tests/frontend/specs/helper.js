@@ -136,7 +136,7 @@ describe("the test helper", function(){
         return false;
       }, 1500).fail(function(){
         var duration = Date.now() - startTime;
-        expect(duration).to.be.greaterThan(1400);
+        expect(duration).to.be.greaterThan(1499);
         done();
       });
     });
@@ -149,8 +149,8 @@ describe("the test helper", function(){
         checks++;
         return false;
       }, 2000, 100).fail(function(){
-        expect(checks).to.be.greaterThan(10);
-        expect(checks).to.be.lessThan(30);
+        expect(checks).to.be.greaterThan(19);
+        expect(checks).to.be.lessThan(21);
         done();
       });
     });
@@ -170,6 +170,66 @@ describe("the test helper", function(){
         },0).fail(function(){
           done();
         });
+      });
+
+      xit("throws if you don't listen for fails", function(done){
+        var onerror = window.onerror;
+        window.onerror = function(){
+          window.onerror = onerror;
+          done();
+        }
+
+        helper.waitFor(function(){
+          return false;
+        },100);
+      });
+    });
+  });
+
+  describe("the waitForPromise method", function(){
+    it("takes a timeout and waits long enough", async function(){
+      this.timeout(2000);
+      var startTime = Date.now();
+      await helper.waitForPromise(function(){
+        return false;
+      }, 1500).catch(function(){
+        var duration = Date.now() - startTime;
+        expect(duration).to.be.greaterThan(1499);
+      })
+    });
+
+    it("takes an interval and checks on every interval", async function(){
+      this.timeout(4000);
+      var checks = 0;
+
+      await helper.waitForPromise(function(){
+        checks++;
+        return false;
+      }, 2000, 100).catch(function(){
+        expect(checks).to.be.greaterThan(19);
+        expect(checks).to.be.lessThan(21);
+      });
+    });
+
+    describe("returns a deferred object", function(){
+      it("it calls then after success", async function(){
+        let called = false;
+        await helper.waitForPromise(function(){
+          return true;
+        }).then(function(){
+          called = true;
+        });
+        expect(called).to.be(true);
+      });
+
+      it("calls catch on failure", async function(){
+        let called = false;
+        await helper.waitForPromise(function(){
+          return false;
+        },0).catch(function(){
+          called = true;
+        });
+        expect(called).to.be(true);
       });
 
       xit("throws if you don't listen for fails", function(done){
